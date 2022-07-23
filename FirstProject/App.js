@@ -17,11 +17,11 @@ export default function App() {
 		closeAddGoalHandler();
 	}
 
-  function deleteItemHandler(id) {
-    setCourseGoals(currentCourseGoals => {
-      return currentCourseGoals .filter(goal => goal.id !== id);
-    });
-  }
+	function deleteItemHandler(id) {
+		setCourseGoals((currentCourseGoals) => {
+			return currentCourseGoals.filter((goal) => goal.id !== id);
+		});
+	}
 
 	function openAddGoalHandler() {
 		setModalVisible(true);
@@ -32,34 +32,39 @@ export default function App() {
 	}
 
 	return (
-		<View style={styles.appContainer}>
-			<Pressable onPress={openAddGoalHandler}>
-				<View>
-					<Text style={styles.addGoalText}>Add New Goal</Text>
+		<>
+			<StatusBar style="light" />
+			<View style={styles.appContainer}>
+				<Pressable onPress={openAddGoalHandler}>
+					<View>
+						<Text style={styles.addGoalText}>Add New Goal</Text>
+					</View>
+				</Pressable>
+				<GoalInput
+					onAddGoal={addGoalHandler}
+					modalVisible={modalVisible}
+					closeModal={closeAddGoalHandler}
+				/>
+				<View style={styles.goalList}>
+					<FlatList
+						data={courseGoals}
+						renderItem={(itemData) => {
+							return (
+								<GoalItem
+									text={itemData.item.text}
+									id={itemData.item.id}
+									onDeleteItem={deleteItemHandler}
+								/>
+							);
+						}}
+						keyExtractor={(item) => {
+							return item.id;
+						}}
+						alwaysBounceVertical={false}
+					></FlatList>
 				</View>
-			</Pressable>
-			<GoalInput 
-				onAddGoal={addGoalHandler} 
-				modalVisible={modalVisible}
-				closeModal={closeAddGoalHandler}
-			/>
-			<View style={styles.goalList}>
-				<FlatList
-					data={courseGoals}
-					renderItem={(itemData) => {
-						return <GoalItem 
-                      text={itemData.item.text} 
-                      id={itemData.item.id}
-                      onDeleteItem={deleteItemHandler}
-                    />;
-					}} 
-					keyExtractor={(item) => {
-						return item.id;
-					}}
-					alwaysBounceVertical={false}
-				></FlatList>
 			</View>
-		</View>
+		</>
 	);
 }
 
@@ -73,10 +78,10 @@ const styles = StyleSheet.create({
 	goalList: {
 		flex: 8,
 		width: "90%",
-		marginTop: 10
+		marginTop: 10,
 	},
 	addGoalText: {
 		fontSize: 20,
-		color: "blue"
-	}
+		color: "#a065ec",
+	},
 });
